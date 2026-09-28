@@ -1,0 +1,24 @@
+name: Update profile stats
+
+on:
+  schedule:
+    - cron: "0 15 * * *" # 00:00 KST
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 update_stats.py
+        env:
+          GITHUB_TOKEN: ${{ secrets.STATS_TOKEN || secrets.GITHUB_TOKEN }}
+      - run: |
+          git diff --quiet && exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "41898286+github-actions[bot]@users.noreply.github.com"
+          git commit -am "chore: update profile stats"
+          git push

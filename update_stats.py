@@ -16,7 +16,7 @@ QUERY = """{ user(login: "%s") {
   contributionsCollection { contributionCalendar { totalContributions
     weeks { contributionDays { contributionCount } } } }
   repositories(first: 100, ownerAffiliations: OWNER, isFork: false, privacy: PUBLIC) {
-    nodes { languages(first: 20) { edges { size node { name } } } } }
+    nodes { name languages(first: 20) { edges { size node { name } } } } }
 } }""" % LOGIN
 
 
@@ -41,6 +41,8 @@ def account_age(created, today):
 def languages(repos):
     sizes = {}
     for r in repos:
+        if r["name"] == LOGIN:  # the card repo itself (this script) is not real work
+            continue
         for e in r["languages"]["edges"]:
             sizes[e["node"]["name"]] = sizes.get(e["node"]["name"], 0) + e["size"]
     total = sum(sizes.values())

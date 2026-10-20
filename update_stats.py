@@ -71,7 +71,7 @@ def main():
     created = dt.date.fromisoformat(user["createdAt"][:10])
     rows = {
         ". Account Age: ": account_age(created, dt.datetime.now(dt.timezone.utc).date()),
-        ". Languages: ": languages(user["repositories"]["nodes"]),
+        ". Languages: ": "Python, Go",
         ". Contributions: ": f"{cal['totalContributions']:,}",
     }
     spark = sparkline(cal["weeks"])
